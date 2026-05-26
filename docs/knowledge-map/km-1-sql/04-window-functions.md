@@ -192,7 +192,7 @@ ORDER BY revenue DESC;
 -- 1. 聚合窗口函数的默认帧
 -- 以下两个看似等价，实际不同
 SUM(revenue) OVER (ORDER BY date)               -- 默认 RANGE UNBOUNDED PRECEDING AND CURRENT ROW
-SUM(revenue) OVER (ORDER BY date ROWS UNBOUNDED PRECEDING)  -- 等价但更清晰
+SUM(revenue) OVER (ORDER BY date ROWS UNBOUNDED PRECEDING)  -- 注意：RANGE（默认）和 ROWS 在有平局值时结果可能不同
 
 -- 2. PARTITION BY 与 ORDER BY 的顺序
 -- PARTITION BY 必须在 ORDER BY 之前

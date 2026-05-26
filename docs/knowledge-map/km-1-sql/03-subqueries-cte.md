@@ -206,7 +206,7 @@ FROM split;
 |--------|------|
 | 必须有 UNION ALL | 递归 CTE 只能使用 UNION ALL，不能使用 UNION |
 | 终止条件 | 递归部分必须最终返回 0 行，否则会无限循环 |
-| 递归深度限制 | 默认限制（如 PostgreSQL 默认 100），可通过 `SET max_recursive_iterations = N` 调整 |
+| 递归深度限制 | 默认限制（如 PostgreSQL 默认 100），可通过 `SET max_recursive_cte_iterations = N` 调整 |
 | 性能 | 递归 CTE 对大数据量树形结构性能不如物化路径（Materialized Path）方案 |
 
 ## 子查询 vs CTE 对比

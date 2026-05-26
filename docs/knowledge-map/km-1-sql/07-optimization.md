@@ -183,14 +183,16 @@ LIMIT 20;
 
 ### 6. 不必要的大表 JOIN
 
+提前过滤可以减少 JOIN 的数据量，但现代优化器通常会自动下推过滤条件。以下两种写法可能产生相同的执行计划：
+
 ```sql
--- 坏：先 JOIN 再过滤
+-- 直接书写（可读性更好，优化器通常会自动下推 WHERE 条件）
 SELECT o.*, u.user_name
 FROM orders o
 LEFT JOIN users u ON o.user_id = u.user_id
 WHERE o.created_at >= '2025-05-01';
 
--- 好：先过滤再 JOIN（可确保同一结果时）
+-- 手动先过滤再 JOIN（在部分场景下提前明确数据范围）
 SELECT o.*, u.user_name
 FROM (SELECT * FROM orders WHERE created_at >= '2025-05-01') o
 LEFT JOIN users u ON o.user_id = u.user_id;

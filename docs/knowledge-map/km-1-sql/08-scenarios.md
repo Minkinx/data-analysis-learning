@@ -1,6 +1,8 @@
 # 实战场景
 
 > 本节汇集数据分析面试和日常工作中最经典的 SQL 场景：留存分析、漏斗转化、RFM 用户分层、连续登录、最大连续天数。每个场景都提供可直接使用的模板 SQL。
+>
+> **方言说明**：本文示例混合使用了 PostgreSQL 和 MySQL 语法。`DATE_TRUNC` 为 PostgreSQL 专用，`DATEDIFF` 为 MySQL 专用，`action_date - ROW_NUMBER()` 日期直接相减为 PostgreSQL 语法，已在对应位置标注。
 
 ## 概述
 
@@ -27,16 +29,16 @@ daily_active AS (
 SELECT
   fa.first_date,
   COUNT(DISTINCT fa.user_id)                                                 AS new_users,
-  COUNT(DISTINCT CASE WHEN DATEDIFF(da.action_date, fa.first_date) = 1
+  COUNT(DISTINCT CASE WHEN DATEDIFF(da.action_date, fa.first_date) = 1  -- MySQL 语法
     THEN da.user_id END)                                                     AS day_1_retained,
-  COUNT(DISTINCT CASE WHEN DATEDIFF(da.action_date, fa.first_date) = 3
+  COUNT(DISTINCT CASE WHEN DATEDIFF(da.action_date, fa.first_date) = 3  -- MySQL 语法
     THEN da.user_id END)                                                     AS day_3_retained,
-  COUNT(DISTINCT CASE WHEN DATEDIFF(da.action_date, fa.first_date) = 7
+  COUNT(DISTINCT CASE WHEN DATEDIFF(da.action_date, fa.first_date) = 7  -- MySQL 语法
     THEN da.user_id END)                                                     AS day_7_retained,
-  COUNT(DISTINCT CASE WHEN DATEDIFF(da.action_date, fa.first_date) = 30
+  COUNT(DISTINCT CASE WHEN DATEDIFF(da.action_date, fa.first_date) = 30  -- MySQL 语法
     THEN da.user_id END)                                                     AS day_30_retained,
   -- 计算留存率
-  ROUND(COUNT(DISTINCT CASE WHEN DATEDIFF(da.action_date, fa.first_date) = 7
+  ROUND(COUNT(DISTINCT CASE WHEN DATEDIFF(da.action_date, fa.first_date) = 7  -- MySQL 语法
     THEN da.user_id END) * 1.0 / COUNT(DISTINCT fa.user_id), 4)              AS day_7_retention_rate
 FROM first_actions fa
 LEFT JOIN daily_active da
@@ -155,7 +157,7 @@ WITH user_rfm AS (
   SELECT
     user_id,
     -- R：最近一次购买距今的天数（越小越活跃）
-    DATEDIFF(CURRENT_DATE, MAX(order_date)) AS recency,
+    DATEDIFF(CURRENT_DATE, MAX(order_date)) AS recency,  -- MySQL 语法
     -- F：购买频率
     COUNT(DISTINCT order_id)               AS frequency,
     -- M：总消费金额
@@ -200,7 +202,7 @@ user_with_group AS (
     -- 用日期减去行号，连续日期的差值相同
     action_date - ROW_NUMBER() OVER (
       PARTITION BY user_id ORDER BY action_date
-    ) AS grp
+    ) AS grp  -- PostgreSQL 语法：日期直接减整数
   FROM user_daily
 ),
 consecutive_groups AS (
@@ -291,7 +293,7 @@ SELECT
   fo.user_id,
   fo.first_order_date,
   o2.order_date AS second_order_date,
-  DATEDIFF(o2.order_date, fo.first_order_date) AS days_to_second_order
+  DATEDIFF(o2.order_date, fo.first_order_date) AS days_to_second_order  -- MySQL 语法
 FROM first_orders fo
 LEFT JOIN order_ranked o2
   ON fo.user_id = o2.user_id AND o2.order_seq = 2

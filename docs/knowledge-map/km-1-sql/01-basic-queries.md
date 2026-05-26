@@ -135,7 +135,7 @@ SELECT * FROM products ORDER BY price DESC LIMIT 10;
 SELECT * FROM products ORDER BY product_id
 LIMIT 20 OFFSET 20;  -- OFFSET = (page - 1) * page_size
 
--- 简写形式（MySQL / PostgreSQL）
+-- 简写形式（MySQL 专用）
 SELECT * FROM products ORDER BY product_id
 LIMIT 20 OFFSET 20;
 -- 等价于

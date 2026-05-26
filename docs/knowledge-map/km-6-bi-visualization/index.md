@@ -14,5 +14,5 @@
 
 ## 参考
 
-- [学习路径：可视化入门](/learning-paths/path-2-core/02-visualization) — 快速入门版本
+- [学习路径：可视化入门](/learning-paths/path-2-core/05-visualization) — 快速入门版本
 - [学习路径：BI 工具](/learning-paths/path-2-core/03-bi-tools) — BI 工具选型指南

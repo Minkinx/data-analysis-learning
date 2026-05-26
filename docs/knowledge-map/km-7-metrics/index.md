@@ -14,4 +14,4 @@
 
 ## 参考
 
-- [学习路径：指标](/learning-paths/path-2-core/04-metrics) — 快速入门版本
+- [学习路径：业务指标体系建设](/learning-paths/path-2-core/04-metrics) — 快速入门版本

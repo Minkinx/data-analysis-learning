@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  base: '/data-analysis-learning/',
   title: 'BI 数据分析知识指南',
   description: '面向初中级数据分析师的系统化知识体系',
   lang: 'zh-CN',
